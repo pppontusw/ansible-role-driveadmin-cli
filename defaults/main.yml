@@ -1,0 +1,4 @@
+# Superadmin @ Google Apps
+SERVICE_ACCOUNT_IMPERSONATE_ACCOUNT: 'superadmin@example.com'
+# Secret key for Service Account
+SECRET_KEY_JSON: <json>

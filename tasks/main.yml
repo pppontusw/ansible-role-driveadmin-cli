@@ -1,0 +1,32 @@
+- include: "{{ ansible_os_family }}.yml"
+  become: yes
+
+- name: pip install
+  pip: name={{item}}
+  with_items:
+    - httplib2
+    - oauth2client
+  become: yes
+
+- name: create application folder
+  file: 
+    path: '/opt/gapps-drive-admin-cli'
+    state: directory
+    mode: 0755
+  become: yes
+
+- name: git clone
+  git: repo=https://github.com/pppontusw/Google-Drive-Sharing-Admin-CLI.git dest=/opt/gapps-drive-admin-cli
+
+- name: copy configs
+  template:
+    src: "../templates/{{item}}.j2"
+    dest: "/opt/gapps-drive-admin-cli/{{item}}"
+    mode: 0755
+  with_items: 
+    - config.py
+
+- name: Copy secret key
+  copy: 
+    content: "{{SECRET_KEY_JSON}}" 
+    dest: "/opt/gapps-drive-admin-cli/{{SERVICE_ACCOUNT_JSON_FILE_PATH}}"
